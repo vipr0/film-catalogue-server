@@ -9,4 +9,4 @@ exports.addNewFilm = catchAsync(async(req, res, next) => {
         status: 'success',
         data: { film: newFilm }
     })
-}) 
+})

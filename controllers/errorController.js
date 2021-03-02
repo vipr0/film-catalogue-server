@@ -36,9 +36,6 @@ const handleInvalidRequestBody = () => {
 }
 
 module.exports = (err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || 'error';
-
     let error = {};
 
     if (err.code === 11000) error = handleDuplicateFields(err);
@@ -46,7 +43,9 @@ module.exports = (err, req, res, next) => {
     if (err.name === 'ValidationError') error = handleValidationErrorDB(err);
     if (err.type === 'entity.parse.failed') error = handleInvalidRequestBody();
 
-    error.details = err
+    error.statusCode = err.statusCode || 500;
+    error.status = err.status || 'error';
+    error.details = err;
 
     sendError(error, req, res);
 };
