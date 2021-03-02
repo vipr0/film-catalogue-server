@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const filmSchema = new mongoose.Schema({
     title: {
@@ -28,10 +29,17 @@ const filmSchema = new mongoose.Schema({
     },
     stars: {
         type: [String],
-        required: [true, 'A film must have stars']
-    }
+        required: [true, 'A film must have stars'],
+
+    },
+    slug: String
 });
 
-const Tour = mongoose.model('Film', filmSchema);
+filmSchema.pre('save', function(next) {
+    this.slug = slugify(this.title, { lower: true });
+    next();
+});
 
-module.exports = Tour;
+const Film = mongoose.model('Film', filmSchema);
+
+module.exports = Film;
