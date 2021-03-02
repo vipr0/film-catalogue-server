@@ -29,6 +29,12 @@ const handleValidationErrorDB = err => {
     return new AppError(message, 400);
 };
 
+const handleInvalidRequestBody = () => {
+    const message = 'Invalid request body json. Check and try again';
+
+    return new AppError(message, 400)
+}
+
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
@@ -38,6 +44,7 @@ module.exports = (err, req, res, next) => {
     if (err.code === 11000) error = handleDuplicateFields(err);
     if (err.name === 'CastError') error = handleCastErrorDB(err);
     if (err.name === 'ValidationError') error = handleValidationErrorDB(err);
+    if (err.type === 'entity.parse.failed') error = handleInvalidRequestBody();
 
     error.details = err
 
