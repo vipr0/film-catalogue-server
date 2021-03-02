@@ -12,7 +12,7 @@ router
     .route('/:id')
     .get(console.log) // Get film by id
     .patch(console.log) // Edit film
-    .delete(console.log) // Delete film
+    .delete(filmController.deleteFilm) // Delete film
 
 router.post('/import', console.log) //Import
 
