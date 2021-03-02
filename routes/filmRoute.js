@@ -5,12 +5,12 @@ const router = express.Router();
 
 router
     .route('/')
-    .get(console.log) // Get all films
+    .get(filmController.getAllFilms) // Get all films
     .post(filmController.addNewFilm) // Add new film
 
 router
     .route('/:id')
-    .get(console.log) // Get film by id
+    .get(filmController.getFilm) // Get film by id
     .patch(console.log) // Edit film
     .delete(filmController.deleteFilm) // Delete film
 

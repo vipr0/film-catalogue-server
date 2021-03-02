@@ -10,7 +10,10 @@ const sendError = (err, req, res) => {
 };
 
 const handleCastErrorDB = err => {
-    const message = `Invalid ${err.path}: ${err.value}.`;
+    let message;
+
+    if(err.path === '_id') message = 'Invalid ID provided'
+    else message = `Invalid ${err.path}: ${err.value}.`;
 
     return new AppError(message, 400);
 };
