@@ -39,16 +39,16 @@ const handleInvalidRequestBody = () => {
 }
 
 module.exports = (err, req, res, next) => {
-    let error = {};
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || 'error';
 
-    if (err.code === 11000) error = handleDuplicateFields(err);
-    if (err.name === 'CastError') error = handleCastErrorDB(err);
-    if (err.name === 'ValidationError') error = handleValidationErrorDB(err);
-    if (err.type === 'entity.parse.failed') error = handleInvalidRequestBody();
+    let error = { ...err };
+    error.message = err.message;
 
-    error.statusCode = err.statusCode || 500;
-    error.status = err.status || 'error';
-    error.details = err;
+    if (error.name === 'CastError') error = handleCastErrorDB(error);
+    if (error.code === 11000) error = handleDuplicateFields(error);
+    if (error.name === 'ValidationError') error = handleValidationErrorDB(error);
+    if (error.type === 'entity.parse.failed') error = handleInvalidRequestBody();
 
     sendError(error, req, res);
 };
