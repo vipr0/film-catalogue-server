@@ -2,6 +2,7 @@ const express = require('express');
 const filmRouter = require('./routes/filmRoute');
 const errorController = require('./controllers/errorController');
 const bodyParser = require('body-parser');
+const AppError = require('./utils/appError');
 
 const app = express();
 
@@ -10,6 +11,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use('/films', filmRouter);
+
+app.all('*', (req, res, next) => {
+    next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
+})
 
 app.use(errorController)
 
