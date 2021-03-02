@@ -3,7 +3,7 @@ const AppError = require('../utils/appError');
 const Film = require('../models/filmModel');
 
 exports.getAllFilms = catchAsync(async(req, res, next) => {
-    const allFilms = await Film.find();
+    const allFilms = await Film.find({}).sort('title');
 
     res.status(200).json({
         status: 'success',
@@ -32,6 +32,21 @@ exports.addNewFilm = catchAsync(async(req, res) => {
         data: { film: newFilm }
     })
 });
+
+exports.searchFilm = catchAsync(async(req, res) => {
+    const regeexp = new RegExp(req.query.query, 'i');
+
+    const result = await Film.find({ $or: [
+        {'title': { $regex: regeexp }},
+        {'stars': { $regex: regeexp }}
+    ]});
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Succesfull request',
+        result,
+    });
+})
 
 exports.deleteFilm = catchAsync(async(req, res, next) => {
     const deletedFilm = await Film.findByIdAndDelete(req.params.id);

@@ -3,6 +3,9 @@ const filmController = require('../controllers/filmController');
 
 const router = express.Router();
 
+router.get('/search', filmController.searchFilm)
+router.post('/import', console.log) //Import
+
 router
     .route('/')
     .get(filmController.getAllFilms) // Get all films
@@ -11,9 +14,7 @@ router
 router
     .route('/:id')
     .get(filmController.getFilm) // Get film by id
-    .patch(console.log) // Edit film
     .delete(filmController.deleteFilm) // Delete film
 
-router.post('/import', console.log) //Import
 
 module.exports = router;
