@@ -1,10 +1,15 @@
 const express = require('express');
+const upload = require('../utils/uploader');
 const filmController = require('../controllers/filmController');
 
 const router = express.Router();
 
 router.get('/search', filmController.searchFilm)
-router.post('/import', console.log) //Import
+router.post('/import', 
+    upload.single('file'), 
+    filmController.parseFile,
+    filmController.insertManyFilms
+    ) //Import
 
 router
     .route('/')
