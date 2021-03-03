@@ -1,4 +1,6 @@
 const express = require('express');
+const compression = require('compression');
+
 const filmRouter = require('./routes/filmRoute');
 const errorController = require('./controllers/errorController');
 const bodyParser = require('body-parser');
@@ -9,6 +11,9 @@ const app = express();
 // Body parser, reading data from body into req.body
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+// Compression
+app.use(compression());
 
 app.use('/films', filmRouter);
 
