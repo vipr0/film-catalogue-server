@@ -1,7 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Film = require('../models/filmModel');
-const hasDuplicates = require('../utils/hasDuplicates');
 
 exports.getAllFilms = catchAsync(async (req, res, next) => {
     const allFilms = await Film.find({}).sort('title');
@@ -30,12 +29,6 @@ exports.getFilm = catchAsync(async (req, res, next) => {
 });
 
 exports.addNewFilm = catchAsync(async (req, res, next) => {
-    const { stars } = req.body;
-
-    if(hasDuplicates(stars)) {
-        return next(new AppError("Stars has duplicates. Check if you don't enter same actor twice.", 400));
-    }
-    
     const newFilm = await Film.create(req.body);
     
     res.status(201).json({
@@ -129,7 +122,8 @@ exports.insertManyFilms = catchAsync(async (req, res, next) => {
                 status: 'success',
                 data: { 
                     fails: results.filter(result => result.error).length,
-                    successes: results.filter(result => !result.error).length 
+                    successes: results.filter(result => !result.error).length,
+                    results
                 }
             })
         });

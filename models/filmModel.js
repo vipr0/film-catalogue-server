@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const AppError = require('../utils/appError');
+const hasDuplicates = require('../utils/hasDuplicates');
 
 const filmSchema = new mongoose.Schema({
     title: {
@@ -28,6 +30,10 @@ const filmSchema = new mongoose.Schema({
     stars: {
         type: [String],
         required: [true, 'A film must have stars'],
+        validate: {
+            validator: (value) => value.length > 0,
+            message: 'You should have at least one star'
+        }
     },
 }, { 
     collation: { 
@@ -38,6 +44,14 @@ const filmSchema = new mongoose.Schema({
         numericOrdering: true 
     } 
 });
+
+filmSchema.pre('save', function (next) {
+    if(hasDuplicates(this.stars)) {
+        next(new AppError("Stars has duplicates. Check if you don't enter same actor twice.", 400))
+    }
+
+    next();
+})
 
 const Film = mongoose.model('Film', filmSchema);
 
