@@ -59,13 +59,13 @@ test('Should get error if add new film without required field (format)', async (
     expect(response.body.message).toBe("Film validation failed: format: A film must have a format (VHS, DVD, Blu-Ray)")
 })
 
-test('Should get error if add new film with non unique title', async () => {
+test('Should get error if add new film with non unique values', async () => {
     const response = await request(app)
         .post('/films')
         .send({ ...filmDataExample, _id: null })
         .expect(400)
 
-    expect(response.body.message).toBe("Non unique value in title ")
+    expect(response.body.message).toBe("Non unique value in title, releaseYear, format, stars ")
 })
 
 test('Should get all films', async () => {

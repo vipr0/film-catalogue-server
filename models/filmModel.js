@@ -44,6 +44,8 @@ const filmSchema = new mongoose.Schema({
         numericOrdering: true 
     } 
 });
+ 
+filmSchema.index({ title: 1, releaseYear: 1, format: 1, stars: 1 }, { unique: true, name: 'all_unique' })
 
 filmSchema.pre('save', function (next) {
     if(hasDuplicates(this.stars)) {
