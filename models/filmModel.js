@@ -4,7 +4,6 @@ const filmSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, 'A film must have a title'],
-        unique: true,
         trim: true
     },
     releaseYear: {
@@ -29,8 +28,15 @@ const filmSchema = new mongoose.Schema({
     stars: {
         type: [String],
         required: [true, 'A film must have stars'],
-
     },
+}, { 
+    collation: { 
+        locale: 'en_US', 
+        strength: 1, 
+        caseLevel: true, 
+        caseFirst: "upper", 
+        numericOrdering: true 
+    } 
 });
 
 const Film = mongoose.model('Film', filmSchema);
