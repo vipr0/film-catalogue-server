@@ -41,6 +41,15 @@ test('Should add new film to DB', async () => {
     expect(newFilm).not.toBeNull()
 })
 
+test('Should get error if add new film with duplicates in stars array', async () => {
+    const response = await request(app)
+        .post('/films')
+        .send({ ...filmDataExample, stars: ["MEl Brooks", "Mel Brooks ", "mel Brooks"]})
+        .expect(400)
+
+    expect(response.body.message).toBe("Stars has duplicates. Check if you don't enter same actor twice.")
+})
+
 test('Should get error if add new film without required field (format)', async () => {
     const response = await request(app)
         .post('/films')
